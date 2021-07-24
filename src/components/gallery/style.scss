@@ -1,0 +1,59 @@
+.gallery {
+	margin-top: 60px;
+}
+
+.list {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 -5px;
+}
+
+.item {
+	padding: 0 5px;
+	margin-bottom: 10px;
+
+	img {
+		display: block;
+		height: 150px;
+		box-sizing: border-box;
+	}
+
+	&.loading {
+		position: relative;
+		overflow: hidden;
+
+		&::before {
+			content: "";
+			position: absolute;
+			left: 5px;
+			right: 5px;
+			top: 0;
+			height: 100%;
+			background: #dfdfdf;
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 50%;
+			height: 100%;
+			background: #fff;
+			opacity: 0.5;
+			animation: placehodler 1s infinite;
+		}
+	}
+}
+
+@keyframes placehodler {
+	0% {
+		transform: translatex(-100%);
+	}
+	50% {
+		transform: translatex(200%);
+	}
+	100% {
+		transform: translatex(200%);
+	}
+}

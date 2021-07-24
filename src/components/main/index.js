@@ -9,26 +9,28 @@ class Main extends React.Component {
 		this.state = {
 			initial: 'state',
 			gallery: {
-				list: {},
-				add() {
+				list: [],
+				add(arr) {
 					this.setState(prevState => ({
 						gallery: {
 							...prevState.gallery,
-							list: {
+							list: [
+								...arr,
 								...prevState.gallery.list,
-							}
+							]
 						}
 					}));
 				},
 				remove() {
-					this.setState(prevState => ({
-						gallery: {
-							...prevState.gallery,
-							list: {
-								...prevState.gallery.list,
-							}
-						}
-					}));
+					console.log('remove')
+					// this.setState(prevState => ({
+					// 	gallery: {
+					// 		...prevState.gallery,
+					// 		list: {
+					// 			...prevState.gallery.list,
+					// 		}
+					// 	}
+					// }));
 				},
 			}
 		}
@@ -40,9 +42,9 @@ class Main extends React.Component {
 	}
 	render() {
 		return <React.Fragment>
-			<div className="container">
+			<div className="main">
 				<Upload add={this.state.gallery.add} />
-				<Gallery remove={this.state.gallery.remove} />
+				<Gallery list={this.state.gallery.list} remove={this.state.gallery.remove} />
 			</div>
 		</React.Fragment>;
 	}
