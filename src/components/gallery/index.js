@@ -4,9 +4,16 @@ import pixel from "./pixel.gif";
 import './style.scss';
 
 class Gallery extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			loaded: {}
+		}
+	}
 	componentDidMount() {
 		this.grid();
 		window.addEventListener('resize', this.grid);
+
 	}
 	componentDidUpdate() {
 		this.grid();
@@ -52,18 +59,35 @@ class Gallery extends React.Component {
 			}
 		});
 	}
+	thisList = null
 	gridLoad() {
-		this.props.list.forEach(item => {
-			if (!item.state) {
+		this.props.gallery.toArray().forEach(item => {
+
+			if (!this.state.loaded[item.id]) {
 				const image = new Image();
+
+				this.setState(prevState => ({
+					loaded: {
+						...prevState.loaded,
+						[item.id]: {
+							id: item.id,
+							state: 'loading',
+						}
+					}
+				}));
 	
 				image.src = item.url;
 
-				item.state = 'loading';
-				console.log(item.state)
 				image.onload = () => {
-					item.state = 'load';
-					this.forceUpdate();
+					this.setState(prevState => ({
+						loaded: {
+							...prevState.loaded,
+							[item.id]: {
+								...prevState.loaded[item.id],
+								state: 'load',
+							}
+						}
+					}));
 				}
 			}
 		});
@@ -72,8 +96,9 @@ class Gallery extends React.Component {
 		return <div className="gallery">
 			<Container>
 				<div className="list">
-					{this.props.list.map((image, i) => <div className={image.state === 'load' ? "item" : "item loading"} obj={image} key={i} >
-						<img src={image.state === 'load' ? image.url : pixel} alt="" />
+					{this.props.gallery.toArray().map((image, i) => <div className={this.state.loaded[image.id] ? (this.state.loaded[image.id].state === 'load' ? "item" : "item loading") : null} obj={image} key={i} >
+						<img src={this.state.loaded[image.id] ? (this.state.loaded[image.id].state === 'load' ? image.url : pixel) : pixel} alt="" />
+						<button onClick={() => this.props.gallery.delete(image.id)} className="item__remove"></button>
 					</div>)}
 				</div>
 			</Container>

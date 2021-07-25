@@ -22,32 +22,22 @@ class Upload extends React.Component {
 		}));
 	}
 	uploadHandler() {
-		const list = [];
-
-		if (this.checkExtension(this.state.inputValue) === 'json') {
+		if (this.getExtension(this.state.inputValue) === 'json') {
 			fetch(this.state.inputValue)
 				.then(response => response.json())
 				.then(data => {
 					data.galleryImages.forEach(imageObj => {
-						// console.log(imageObj.url)
-						list.push({
-							url: imageObj.url,
-						});
+						this.props.add(imageObj.url);
 					});
 
-					this.props.add(list);
 				});
-		} else if(this.extensions.includes(this.checkExtension(this.state.inputValue))) {
-			list.push({
-				url: this.state.inputValue,
-			});
-
-			this.props.add(list);
+		} else if(this.extensions.includes(this.getExtension(this.state.inputValue))) {
+			this.props.add(this.state.inputValue);
 		} else {
 			console.log('error')
 		}
 	}
-	checkExtension(string) {
+	getExtension(string) {
 		const arr = string.split('.');
 
 		return (arr[arr.length - 1]).toLowerCase();
